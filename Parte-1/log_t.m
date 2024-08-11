@@ -4,5 +4,5 @@ function res = log_t(x,y)
       error('x debe ser mayor que 0 y y debe ser mayor que 0 y distinto de 1');
     end
     res = ln_t(x)* div_t(ln_t(y));
- end
+ endfunction
 

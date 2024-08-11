@@ -4,7 +4,6 @@ function logNatural = ln_t(x)
     error('El valor de a debe ser mayor que 0 y distinto de 1');
   endif
 
-  % Inicializa variables
   sumaAnterior = 0;
   suma = 0;
   numTerminos = 0;
@@ -24,7 +23,6 @@ function logNatural = ln_t(x)
     numTerminos += 1;
   endwhile
 
-  % Calcula el resultado final
   logNatural = ((2 * (x - 1)) * div_t(x + 1)) * suma;
 endfunction
 

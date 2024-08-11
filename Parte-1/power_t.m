@@ -4,8 +4,7 @@ function x0 = power_t(x, y)
         error('No se puede calcular la potencia de 0 con un exponente negativo.');
     end
 
-    % Calcular la potencia usando la función exp y log para manejar exponentes no enteros
     x0 = exp_t(y * ln_t(x));
-end
+endfunction
 
 
