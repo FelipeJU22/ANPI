@@ -1,3 +1,5 @@
+clc
+
 pkg load symbolic;  % Cargar el paquete simbólico
 
 % Definir la variable simbólica y la función
@@ -46,7 +48,7 @@ else
     disp('No hay asintotas inclinadas debido a la existencia de asintotas horizontales.');
 end
 
-% 4. Primera y segunda derivada
+% 6. Primera y segunda derivada
 f_prime = diff(f, x);
 f_double_prime = diff(f_prime, x);
 
@@ -55,26 +57,57 @@ disp(simplify(f_prime));
 disp('Segunda derivada:');
 disp(simplify(f_double_prime));
 
-% 5. Intervalos donde la función es creciente y decreciente
+% 7. Intervalos donde la función es creciente y decreciente
 disp('Intervalos donde la función es creciente y decreciente:');
 critical_points = solve(f_prime == 0, x);
-disp('Puntos críticos:');
+
+% Excluir x = 0 de los puntos críticos
+critical_points = critical_points(critical_points ~= 0);
+
+disp('Puntos críticos (excluyendo x = 0):');
 disp(critical_points);
 
-% Evaluar signos de f' en los intervalos determinados por los puntos críticos
-% Usaremos puntos de prueba para determinar los intervalos crecientes y decrecientes
+% Evaluar la función en puntos críticos y en los extremos para determinar los intervalos crecientes y decrecientes
+for i = 1:length(critical_points)
+    cp = critical_points(i);
+    fprintf('Punto crítico %d: %s\n', i, char(cp));
 
-% Definir una función para evaluar el signo de f'
-test_points = [-10, 0, 10];  % Elegir algunos puntos de prueba
-for pt = test_points
-    f_prime_value = subs(f_prime, x, pt);
-    fprintf('f''(%d) = %f\n', pt, double(f_prime_value));
+    % Evaluar la función en el punto crítico
+    f_cp = subs(f, x, cp);
+
+    % Determinar el punto de prueba adecuado
+    if cp < 0
+        test_point = -10;
+    else
+        test_point = 10;
+    end
+
+    % Evaluar la función en el punto de prueba
+    f_test_point = subs(f, x, test_point);
+
+    if f_cp < f_test_point
+        if cp < 0
+            fprintf('La función es creciente en ]-∞, %s]\n', char(cp));
+        else
+            fprintf('La función es decreciente en [%s, +∞[\n', char(cp));
+        end
+    else
+        if cp < 0
+            fprintf('La función es decreciente en [%s, +∞[\n', char(cp));
+        else
+            fprintf('La función es creciente en [%s, +∞[\n', char(cp));
+        end
+    end
 end
 
-% 6. Intervalos donde la función es cóncava hacia arriba y hacia abajo
+% 8. Intervalos donde la función es cóncava hacia arriba y hacia abajo
 disp('Intervalos donde la función es cóncava hacia arriba y hacia abajo:');
 critical_points_double = solve(f_double_prime == 0, x);
-disp('Puntos críticos de la segunda derivada:');
+
+% Excluir x = 0 de los puntos críticos de la segunda derivada
+critical_points_double = critical_points_double(critical_points_double ~= 0);
+
+disp('Puntos críticos de la segunda derivada (excluyendo x = 0):');
 disp(critical_points_double);
 
 % Evaluar signos de f'' en los intervalos determinados por los puntos críticos de la segunda derivada
@@ -86,10 +119,6 @@ for pt = test_points_double
     f_double_prime_value = subs(f_double_prime, x, pt);
     fprintf('f''''(%d) = %f\n', pt, double(f_double_prime_value));
 end
-
-
-
-
 
 % Graficar la función y sus derivadas
 figure;
@@ -119,3 +148,4 @@ ylabel('f''''(x)');
 grid on;
 
 disp('Fin del análisis y generación de gráficos.');
+
